@@ -1,173 +1,113 @@
-# PSEUDOCODE - STRING MATCHING DENGAN BRUTE FORCE
+# Pseudocode - Tugas Praktikum 1: Pencarian String (Pattern Matching)
 
-==================================================
+## Deskripsi Problem
 
-## FUNCTION DECLARATIONS
+Diberikan sebuah teks dan pattern, cari semua kemunculan pattern dalam teks menggunakan pendekatan brute force.
 
-**FUNCTION** `permutations(iterable, r)`
+**Input:**
 
-- **INPUT**: `iterable` (string atau list), `r` (panjang permutasi)
-- **OUTPUT**: list berisi semua permutasi dengan panjang r
-- **PROCESS**: Generate semua permutasi menggunakan algoritma berbasis indeks
+- Teks: "ALGORITMASTRATEGIALGORITMA"
+- Pattern: "RIT"
 
----
+## Kompleksitas
 
-## VARIABLE DECLARATIONS
-
-**GLOBAL VARIABLES:**
-
-```
-teks                    : string     // Teks yang akan dicari
-pattern                 : string     // Pola yang dicari
-teks_list               : list       // Teks dalam bentuk list karakter
-kemungkianan_pattern    : list       // List kemungkinan pattern berurutan
-temp                    : list       // List temporary untuk pattern yang cocok
-perbandingan_ke         : list       // List indeks perbandingan yang cocok
-jumlah_perbandingan     : integer    // Counter jumlah perbandingan
-kemunculan              : integer    // Jumlah kemunculan pattern
-n                       : integer    // Panjang teks
-m                       : integer    // Panjang pattern
-```
+- **Time Complexity**: O(n × m)
+  - n = panjang teks
+  - m = panjang pattern
+- **Space Complexity**: O(1) untuk pencarian, O(k) untuk menyimpan hasil (k = jumlah kemunculan)
 
 ---
 
-## ALGORITHM
+## Pseudocode
 
-### ALGORITHM 1: `permutations(iterable, r)`
+### Fungsi Utama: brute_force_string_matching
 
 ```
-BEGIN
-    pool ← tuple(iterable)
-    n ← length(pool)
+FUNGSI brute_force_string_matching(teks, pattern):
+    INPUT:
+        teks    : string teks yang akan dicari
+        pattern : string pola yang dicari
 
-    IF r IS None THEN
-        r ← n
-    END IF
+    OUTPUT:
+        indeks_ditemukan   : list indeks kemunculan pattern
+        jumlah_perbandingan : integer total perbandingan karakter
 
-    IF r > n THEN
-        RETURN empty_list
-    END IF
+    PROSES:
+        n ← length(teks)
+        m ← length(pattern)
 
-    result ← empty_list
-    indices ← [0, 1, 2, ..., n-1]
-    cycles ← [n, n-1, n-2, ..., n-r+1]
+        indeks_ditemukan ← []
+        jumlah_perbandingan ← 0
 
-    // Tambahkan permutasi pertama
-    APPEND join(pool[indices[0..r-1]]) TO result
+        // Geser pattern dari posisi 0 sampai n-m
+        UNTUK i DARI 0 SAMPAI (n - m):
+            j ← 0
 
-    WHILE n > 0 DO
-        FOR i FROM r-1 DOWNTO 0 DO
-            cycles[i] ← cycles[i] - 1
+            // Bandingkan karakter per karakter
+            SELAMA j < m:
+                jumlah_perbandingan ← jumlah_perbandingan + 1
 
-            IF cycles[i] = 0 THEN
-                // Rotasi indices
-                indices[i..] ← indices[i+1..] + indices[i..i]
-                cycles[i] ← n - i
-            ELSE
-                j ← cycles[i]
-                SWAP indices[i] WITH indices[-j]
-                APPEND join(pool[indices[0..r-1]]) TO result
-                BREAK inner loop
-            END IF
-        END FOR
+                JIKA teks[i + j] ≠ pattern[j]:
+                    KELUAR DARI LOOP  // Tidak cocok, geser pattern
 
-        IF no break occurred THEN
-            BREAK outer loop
-        END IF
-    END WHILE
+                j ← j + 1
 
-    RETURN result
-END
+            // Jika semua karakter cocok (j == m)
+            JIKA j == m:
+                TAMBAHKAN i KE indeks_ditemukan
+
+        RETURN indeks_ditemukan, jumlah_perbandingan
 ```
 
 ---
 
-### ALGORITHM 2: `main_string_matching`
+### Program Utama
 
 ```
-BEGIN
-    // ========== INISIALISASI ==========
+ALGORITMA PENCARIAN_STRING_BRUTE_FORCE
+
+INPUT:
     teks ← "ALGORITMASTRATEGIALGORITMA"
     pattern ← "RIT"
-    teks_list ← list(teks)
 
-    PRINT length(teks_list)
+PROSES:
+    // ====== 1. IMPLEMENTASI ALGORITMA ======
+    PRINT "Teks:", teks
+    PRINT "Pattern:", pattern
+    PRINT "Panjang teks (n):", length(teks)
+    PRINT "Panjang pattern (m):", length(pattern)
 
-    // ========== BUAT LIST KEMUNGKINAN PATTERN BERURUTAN ==========
-    kemungkianan_pattern ← empty_list
+    start_time ← waktu_sekarang()
+    indeks_hasil, total_perbandingan ← brute_force_string_matching(teks, pattern)
+    end_time ← waktu_sekarang()
 
-    FOR i FROM 0 TO length(teks_list)-1 DO
-        IF (length(teks_list) - i) > length(pattern) THEN
-            substring ← join(teks_list[i..i+length(pattern)-1])
-            APPEND substring TO kemungkianan_pattern
-        END IF
-    END FOR
+    // ====== 2. TAMPILKAN INDEKS KEMUNCULAN ======
+    JIKA indeks_hasil TIDAK KOSONG:
+        PRINT "Pattern ditemukan pada indeks:", indeks_hasil
+        PRINT "Jumlah kemunculan:", length(indeks_hasil)
 
-    // ========== CEK SETIAP KEMUNGKINAN DENGAN BRUTE FORCE ==========
-    temp ← empty_list
-    perbandingan_ke ← empty_list
-    jumlah_perbandingan ← 0
+        // Visualisasi
+        UNTUK SETIAP idx DALAM indeks_hasil:
+            PRINT "idx =", idx, "→", teks[idx : idx + length(pattern)]
+    JIKA TIDAK:
+        PRINT "Pattern TIDAK DITEMUKAN"
 
-    FOR j FROM 0 TO length(kemungkianan_pattern)-1 DO
-        jumlah_perbandingan ← jumlah_perbandingan + 1
+    // ====== 3. JUMLAH PERBANDINGAN ======
+    PRINT "Total perbandingan karakter:", total_perbandingan
+    PRINT "Waktu eksekusi:", end_time - start_time
 
-        IF kemungkianan_pattern[j] = pattern THEN
-            APPEND (j+1) TO perbandingan_ke
-            APPEND kemungkianan_pattern[j] TO temp
-        END IF
-    END FOR
-
-    kemunculan ← length(temp)
-
-    // ========== PENCARIAN DALAM PERMUTASI (JIKA TIDAK DITEMUKAN) ==========
-    IF kemunculan = 0 THEN
-        kemungkinan_baru ← permutations(teks, length(pattern))
-
-        FOR EACH k IN kemungkinan_baru DO
-            jumlah_perbandingan ← jumlah_perbandingan + 1
-
-            IF k = pattern THEN
-                kemunculan ← kemunculan + 1
-            END IF
-        END FOR
-
-        PRINT "POLA TIDAK DITEMUKAN SECARA BERURUTAN, NAMUN DITEMUKAN DALAM PERMUTASI !!!"
-        PRINT "Kemunculan pola", pattern, "dalam teks:", teks, "adalah", kemunculan, "kali."
-    ELSE
-        PRINT "POLA DITEMUKAN SECARA BERURUTAN !!!"
-        PRINT "Kemunculan pola", pattern, "dalam teks:", teks, "adalah", kemunculan, "kali."
-        PRINT "Perbandingan ke:", perbandingan_ke
-    END IF
-
-    // ========== ANALISIS KOMPLEKSITAS ==========
-    PRINT ""
-    PRINT "=== ANALISIS KOMPLEKSITAS ==="
-    PRINT "Jumlah perbandingan yang dilakukan:", jumlah_perbandingan
-    PRINT ""
-
+    // ====== 4. ANALISIS KOMPLEKSITAS ======
     n ← length(teks)
     m ← length(pattern)
 
-    // Worst Case
-    PRINT "**Worst Case:** O(n × m) = O(", n*m, ")"
-    PRINT "  - Pattern tidak ditemukan atau di akhir"
-    PRINT "  - Memeriksa semua posisi:", n, "×", m, "=", n*m, "perbandingan"
-    PRINT ""
+    PRINT "Best Case: O(n) - pattern tidak cocok di karakter pertama"
+    PRINT "Worst Case: O(n × m) - pattern hampir cocok di setiap posisi"
+    PRINT "Average Case: O(n × m)"
 
-    // Best Case
-    PRINT "**Best Case:** O(m)"
-    PRINT "  - Pattern ditemukan di posisi pertama"
-    PRINT "  - Hanya butuh", m, "perbandingan karakter"
-    PRINT ""
-
-    // Average Case
-    PRINT "**Average Case:** O(n × m) = O(", n*m, ")"
-    PRINT "  - Rata-rata memeriksa setengah teks"
-    PRINT "  - Tetap linear terhadap panjang teks dan pattern"
-    PRINT ""
-
-    // Space Complexity
-    PRINT "**Space Complexity:** O(n)"
-    PRINT "  - Menyimpan kemungkinan pattern dalam list"
-END
+OUTPUT:
+    - Indeks kemunculan pattern: [4, 21]
+    - Jumlah kemunculan: 2 kali
+    - Total perbandingan karakter
 ```
+
+---

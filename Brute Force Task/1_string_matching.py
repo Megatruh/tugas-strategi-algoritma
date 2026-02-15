@@ -1,100 +1,128 @@
-def permutations(iterable, r=None):
-    # permutations('ABCD', 2) → AB AC AD BA BC BD CA CB CD DA DB DC
-    # permutations(range(3)) → 012 021 102 120 201 210
+# Tugas Praktikum 1 — Pencarian String (Pattern Matching)
+# Tujuan: Memahami konsep eksplorasi semua kemungkinan posisi substring
 
-    pool = tuple(iterable)
-    n = len(pool)
-    r = n if r is None else r
-    
-    if r > n:
-        return []  # Kembalikan list kosong
-    
-    result = []  # List untuk menyimpan hasil
-    indices = list(range(n))
-    cycles = list(range(n, n-r, -1))
-    result.append("".join(list(pool[i] for i in indices[:r])))
+import time
 
-    while n:
-        for i in reversed(range(r)):
-            cycles[i] -= 1
-            if cycles[i] == 0:
-                indices[i:] = indices[i+1:] + indices[i:i+1]
-                cycles[i] = n - i
-            else:
-                j = cycles[i]
-                indices[i], indices[-j] = indices[-j], indices[i]
-                result.append("".join(list(pool[i] for i in indices[:r])))
-                break
-        else:
-            break
+def brute_force_string_matching(teks, pattern):
+    """
+    Algoritma Brute Force untuk Pattern Matching
+    Mencari semua kemunculan pattern dalam teks
+    """
+    n = len(teks)
+    m = len(pattern)
     
-    return result  # Kembalikan list hasil
+    indeks_ditemukan = []  # Menyimpan indeks kemunculan pattern
+    jumlah_perbandingan = 0  # Counter perbandingan karakter
+    
+    # Geser pattern dari posisi 0 sampai n-m
+    for i in range(n - m + 1):
+        j = 0
+        
+        # Bandingkan karakter per karakter
+        while j < m:
+            jumlah_perbandingan += 1  # Hitung setiap perbandingan
+            
+            if teks[i + j] != pattern[j]:
+                break  # Tidak cocok, geser pattern
+            j += 1
+        
+        # Jika semua karakter cocok
+        if j == m:
+            indeks_ditemukan.append(i)
+    
+    return indeks_ditemukan, jumlah_perbandingan
 
+# ==========================================
+# PROGRAM UTAMA
+# ==========================================
+
+print("=" * 70)
+print("PENCARIAN STRING (PATTERN MATCHING) - BRUTE FORCE")
+print("=" * 70)
+
+# Input sesuai soal
 teks = "ALGORITMASTRATEGIALGORITMA"
-pattern = 'RIT'
+pattern = "RIT"
 
-# pecah teks menjadi list karakter
-teks_list = list(teks)
+print(f"\nTeks    : \"{teks}\"")
+print(f"Pattern : \"{pattern}\"")
+print(f"Panjang teks (n)    : {len(teks)}")
+print(f"Panjang pattern (m) : {len(pattern)}")
+print()
 
-print(len(teks_list))
+# ==========================================
+# 1. Implementasi algoritma pencarian string brute force
+# ==========================================
+print("-" * 70)
+print("1. IMPLEMENTASI ALGORITMA BRUTE FORCE")
+print("-" * 70)
 
-# gabungkan karakter yang berkemungkinaan membentuk pattern
-# masuakn dalam kemungkianan_pattern secara berurutan
-kemungkianan_pattern = []
+print("\nProses pencarian:")
+print("  - Geser pattern dari posisi 0 sampai n-m")
+print("  - Di setiap posisi, bandingkan karakter per karakter")
+print("  - Jika cocok semua, catat indeks")
 
-for i in range(len(teks_list)):
-    if (len(teks_list)- i) > len(pattern): 
-        kemungkianan_pattern.append("".join(teks_list[i:i+len(pattern)]))
+start_time = time.perf_counter()
+indeks_hasil, total_perbandingan = brute_force_string_matching(teks, pattern)
+end_time = time.perf_counter()
 
+print()
 
-# cek setiap kemungkinan pattern dengan pattern yang dicari
-# kemunculan = len([j for j in kemungkianan_pattern if kemungkianan_pattern[j] == pattern])
-temp = []
-perbandingan_ke = []
-jumlah_perbandingan = 0  # Counter untuk perbandingan
+# ==========================================
+# 2. Tampilkan indeks kemunculan pattern
+# ==========================================
+print("-" * 70)
+print("2. INDEKS KEMUNCULAN PATTERN")
+print("-" * 70)
 
-for j in range(len(kemungkianan_pattern)):
-    jumlah_perbandingan += 1  # Hitung setiap perbandingan
-    if kemungkianan_pattern[j] == pattern:
-        perbandingan_ke.append(j+1)
-        temp.append(kemungkianan_pattern[j])
+if indeks_hasil:
+    print(f"\nPattern \"{pattern}\" ditemukan pada indeks: {indeks_hasil}")
+    print(f"Jumlah kemunculan: {len(indeks_hasil)} kali")
+else:
+    print(f"\nPattern \"{pattern}\" TIDAK DITEMUKAN dalam teks.")
 
-kemunculan = len(temp)
+print()
 
-# jika kemunculan nilainya 0 karena pattern tidak ditemukan dalam kemungkianan_pattern yang berurutan
-# cari pattern dalam kemungkianan_pattern yang dipermutasikan
+# ==========================================
+# 3. Hitung jumlah perbandingan karakter
+# ==========================================
+print("-" * 70)
+print("3. JUMLAH PERBANDINGAN KARAKTER")
+print("-" * 70)
 
-if kemunculan == 0:
-    kemungkinan_baru = permutations(teks, len(pattern))
-    for k in kemungkinan_baru:
-        jumlah_perbandingan += 1  # Hitung perbandingan permutasi
-        if k == pattern:
-            kemunculan += 1
-    print(f"\nPOLA TIDAK DITEMUKAN SECARA BERURUTAN, NAMUN DITEMUKAN DALAM PERMUTASI !!!")
-    print(f"Kemunculan pola '{pattern}' dalam teks: {teks} adalah {kemunculan} kali.")
-else  : 
-    print(f"\nPOLA DITEMUKAN SECARA BERURUTAN !!!")
-    print(f"Kemunculan pola '{pattern}' dalam teks: {teks} adalah {kemunculan} kali.")
-    print(f"Perbandingan ke: {perbandingan_ke}")
+print(f"\nTotal perbandingan karakter: {total_perbandingan}")
+print(f"Waktu eksekusi: {end_time - start_time:.6f} detik")
 
-# Analisis Kompleksitas
-print(f"\n=== ANALISIS KOMPLEKSITAS ===")
-print(f"Jumlah perbandingan yang dilakukan: {jumlah_perbandingan}")
-
+# Detail perbandingan
 n = len(teks)
 m = len(pattern)
+print(f"\nDetail:")
+print(f"  - Posisi yang diperiksa: {n - m + 1} posisi (dari 0 sampai {n-m})")
+print(f"  - Setiap posisi dibandingkan maksimal {m} karakter")
 
-print(f"\n**Worst Case:** O({n} x {m}) = O({n*m})")
-print(f"- Pattern tidak ditemukan atau di akhir")
-print(f"- Memeriksa semua posisi: {n} x {m} = {n*m} perbandingan")
+print()
 
-print(f"\n**Best Case:** O({m})")
-print(f"- Pattern ditemukan di posisi pertama")
-print(f"- Hanya butuh {m} perbandingan karakter")
+# ==========================================
+# 4. Analisis kompleksitas waktu
+# ==========================================
+print("-" * 70)
+print("4. ANALISIS KOMPLEKSITAS WAKTU")
+print("-" * 70)
 
-print(f"\n**Average Case:** O({n} x {m}) = O({n*m})")
-print(f"- Rata-rata memeriksa setengah teks")
-print(f"- Tetap linear terhadap panjang teks dan pattern")
+print(f"\nDimana: n = {n} (panjang teks), m = {m} (panjang pattern)")
 
-print(f"\n**Space Complexity:** O({n})")
-print(f"- Menyimpan kemungkinan pattern dalam list")
+print(f"\n• BEST CASE: O(n)")
+print(f"  - Pattern tidak cocok di karakter pertama setiap posisi")
+print(f"  - Hanya 1 perbandingan per posisi")
+print(f"  - Total: {n - m + 1} perbandingan")
+
+print(f"\n• WORST CASE: O(n x m) = O({n} x {m}) = O({n * m})")
+print(f"  - Pattern hampir cocok di setiap posisi")
+print(f"  - Contoh: teks = \"AAAAAA\", pattern = \"AAB\"")
+print(f"  - Maksimal: {n - m + 1} x {m} = {(n - m + 1) * m} perbandingan")
+
+print(f"\n• AVERAGE CASE: O(n x m)")
+print(f"  - Tergantung distribusi karakter")
+print(f"  - Biasanya mendekati O(n) untuk teks acak")
+
+

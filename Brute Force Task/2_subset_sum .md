@@ -1,4 +1,4 @@
-# Implementasi Algoritma Brute Force pada Subset Sum Problem
+# Pseudo Code Implementasi Algoritma Brute Force pada Subset Sum Problem
 
 ## Deskripsi Problem
 Diberikan sebuah array bilangan bulat dan sebuah nilai target, cari semua subset dari array tersebut yang jumlah elemen-elemennya sama dengan target.

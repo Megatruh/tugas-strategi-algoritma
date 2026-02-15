@@ -1,5 +1,5 @@
-# Tugas Praktikum 3 — Traveling Salesman Problem (TSP Mini)
-# Tujuan: Memahami brute force dengan permutasi (n!)
+# Farhan Esha Putra Kusuma Atmaja
+# 247006111066
 
 from itertools import permutations
 import time
@@ -122,48 +122,3 @@ jumlah_rute = len(hasil_rute)
 print(f"\nJumlah rute yang diperiksa: {jumlah_rute}")
 print(f"Rumus: (n-1)! dimana n = jumlah kota")
 print(f"       (4-1)! = 3! = 6 rute")
-
-print()
-
-# ==========================================
-# PERTANYAAN
-# ==========================================
-print("=" * 70)
-print("JAWABAN PERTANYAAN")
-print("=" * 70)
-
-# 1. Berapa kompleksitasnya?
-print("\n1. KOMPLEKSITAS:")
-print("   • Time Complexity : O((n-1)!)")
-print("   • Untuk n kota, kita perlu memeriksa (n-1)! kemungkinan rute")
-print("   • Alasan: kota awal di-fix, sehingga hanya permutasi (n-1) kota lain")
-print("   • Kompleksitas FAKTORIAL = pertumbuhan sangat cepat!")
-
-# 2. Jika kota menjadi 10, berapa jumlah rute?
-import math
-n_10 = 10
-rute_10 = math.factorial(n_10 - 1)
-
-print("\n2. JIKA KOTA MENJADI 10:")
-print(f"   • Jumlah rute = (10-1)! = 9!")
-print(f"   • Jumlah rute = {rute_10:,} rute")
-print(f"   • Sangat banyak! Brute force menjadi tidak praktis.")
-
-print()
-print("-" * 70)
-print("TABEL PERTUMBUHAN KOMPLEKSITAS")
-print("-" * 70)
-print(f"\n{'Jumlah Kota (n)':<20} {'Jumlah Rute (n-1)!':<25}")
-print("=" * 50)
-for n in range(4, 13):
-    rute = math.factorial(n - 1)
-    print(f"{n:<20} {rute:>20,}")
-
-print()
-print("KESIMPULAN:")
-print("• Brute force TSP sangat tidak efisien untuk n besar")
-print("• Perlu algoritma yang lebih baik seperti Dynamic Programming,")
-print("  Branch and Bound, atau algoritma heuristik")
-
-
-

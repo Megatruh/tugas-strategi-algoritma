@@ -1,5 +1,5 @@
-# Tugas Praktikum 4 — Password Brute Force Simulation
-# Tujuan: Memahami eksplorasi kombinasi karakter
+# Farhan Esha Putra Kusuma Atmaja
+# 247006111066
 
 from itertools import product
 import time
@@ -28,7 +28,7 @@ def brute_force_password(target, panjang):
     
     return -1, None, len(kombinasi)  # Tidak ditemukan
 
-# ==========================================
+# ============================================
 # PROGRAM UTAMA
 # ==========================================
 

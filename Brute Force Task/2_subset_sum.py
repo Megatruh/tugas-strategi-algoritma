@@ -1,6 +1,5 @@
-# Tugas Praktikum 2 — Subset SUM
-# Tujuan: Memahami eksplorasi kombinasi menggunakan brute force
-
+# Farhan Esha Putra Kusuma Atmaja
+# 247006111066
 from itertools import chain, combinations
 import time
 

@@ -1,4 +1,4 @@
-# Implementasi Algoritma Brute Force pada Subset Sum Problem
+# Pseudo Code Implementasi Algoritma Brute Force pada Subset Sum Problem
 
 ## Deskripsi Problem
 

@@ -1,5 +1,6 @@
 # Farhan Esha Putra Kusuma Atmaja
 # 247006111066
+import time
 def permutations(iterable, r=None):
     # permutations('ABCD', 2) → AB AC AD BA BC BD CA CB CD DA DB DC
     # permutations(range(3)) → 012 021 102 120 201 210
@@ -39,7 +40,7 @@ pattern = 'RIT'
 teks_list = list(teks)
 
 print(len(teks_list))
-
+start_time = time.perf_counter()
 # gabungkan karakter yang berkemungkinaan membentuk pattern
 # masuakn dalam kemungkianan_pattern secara berurutan
 kemungkianan_pattern = []
@@ -78,13 +79,15 @@ else  :
     print(f"\nPOLA DITEMUKAN SECARA BERURUTAN !!!")
     print(f"Kemunculan pola '{pattern}' dalam teks: {teks} adalah {kemunculan} kali.")
     print(f"Perbandingan ke: {perbandingan_ke}")
-
+end_time = time.perf_counter()
 # Analisis Kompleksitas
 print(f"\n=== ANALISIS KOMPLEKSITAS ===")
 print(f"Jumlah perbandingan yang dilakukan: {jumlah_perbandingan}")
 
 n = len(teks)
 m = len(pattern)
+
+print(f"waktu yang dibutuhkan: {end_time - start_time:.6f} detik")
 
 print(f"\n**Worst Case:** O({n} x {m}) = O({n*m})")
 print(f"- Pattern tidak ditemukan atau di akhir")
